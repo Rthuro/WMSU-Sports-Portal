@@ -26,7 +26,7 @@ COPY apps/backend/package*.json ./apps/backend/
 
 RUN npm ci --omit=dev
 
-COPY --from=builder /apps/backend/dist ./apps/backend/dist
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
 EXPOSE 10000
 
