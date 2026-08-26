@@ -1,29 +1,35 @@
-# Stage 1: Build dependencies
-FROM node:20-slim AS builder
+FROM node:22-slim AS builder
+
 WORKDIR /app
+
 COPY package*.json ./
-# Install only production dependencies to keep the image slim
-RUN npm ci --omit=dev
+COPY apps/backend/package*.json ./apps/backend/
+COPY packages ./packages
 
-# Stage 2: Final runtime image
-FROM node:20-slim
+RUN npm ci
+
+COPY apps/backend ./apps/backend
+
+RUN npm run build --workspace=backend
+
+
+FROM node:22-slim AS runner
+
 WORKDIR /app
 
-# Set production environment
 ENV NODE_ENV=production
-# Align PORT with the EXPOSE instruction and platform expectations
 ENV PORT=10000
 
-# Copy production dependencies from result of stage 1
-COPY --from=builder /app/node_modules ./node_modules
-# Copy application source with correct ownership for the non-root 'node' user
-COPY --chown=node:node . .
+COPY package*.json ./
+COPY apps/backend/package*.json ./apps/backend/
+COPY packages ./packages
 
-# Expose the application port
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
+
 EXPOSE 10000
 
-# Security: Best practice to run as a non-privileged user
 USER node
 
-# Use 'node server.js' directly for cleaner process management
-CMD ["node", "server.js"]
+CMD ["node", "apps/backend/dist/server.js"]
