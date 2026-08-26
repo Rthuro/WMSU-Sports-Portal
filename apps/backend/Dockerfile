@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 COPY apps/backend/package*.json ./apps/backend/
-COPY packages ./packages
+# COPY packages ./packages
 
 RUN npm ci
 
