@@ -4,18 +4,18 @@ on:
   push:
     branches: [main]
     paths:
-      - 'apps/backend/**'
-      - 'packages/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/backend.yml'
+      - "apps/backend/**"
+      - "packages/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/backend.yml"
   pull_request:
     paths:
-      - 'apps/backend/**'
-      - 'packages/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/backend.yml'
+      - "apps/backend/**"
+      - "packages/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/backend.yml"
 
 concurrency:
   group: backend-${{ github.workflow }}-${{ github.ref }}
@@ -40,4 +40,4 @@ jobs:
         run: npm ci
 
       - name: Build backend
-        run: npm run build --workspace=apps/backend
+        run: npm run build --workspace=backend
