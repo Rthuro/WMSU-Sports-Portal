@@ -9,13 +9,6 @@ on:
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/frontend.yml"
-  pull_request:
-    paths:
-      - "apps/frontend/**"
-      - "packages/**"
-      - "package.json"
-      - "package-lock.json"
-      - ".github/workflows/frontend.yml"
 
 concurrency:
   group: frontend-${{ github.workflow }}-${{ github.ref }}
